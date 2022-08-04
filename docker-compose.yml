@@ -1,0 +1,33 @@
+services:
+  web:
+    build: .
+    command: python manage.py runserver.py
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8000:8000
+    environment:
+      - DEBUG=1
+    depends_on:
+      - rabbitmq
+  
+  celery:
+    build: .
+    command: celery worker --app=core --loglevel=info --logfile=logs/celery.log
+    volumes:
+      - .:/usr/src/app
+    enviroments:
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=amqp:amqp//localhost:5672
+      - CELERY_BACKEND=amqp:amqp//localhost:5672
+      - SECRET_KEY=django-insecure-ur*7@2nzly1yv!oz5#pr6am#u^4=y$$jxa%*$$^*mrgh$$z+b4vg2
+    depends_on:
+      - rabbitmq
+      - web
+    links:
+      - rabbitmq:rabbit
+
+  rabbitmq:
+    image: rabbitmq:3.10-alpine
+    ports:
+      - "5672:5672"

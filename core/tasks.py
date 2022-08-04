@@ -2,11 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from datetime import datetime
+from celery import shared_task
 import lxml
 
 from .models import News
 
-@shared_task
+
+@shared_task(name="hackernews_rss")
 def hackernews_rss():
     article_list = []
     try:
@@ -36,7 +38,7 @@ def hackernews_rss():
         print(e)
         
         
-@shared_task(serializer='json')
+@shared_task(serializer='json', name="save_fuction")
 def save_function(article_list):
     print('starting')
     new_count = 0
