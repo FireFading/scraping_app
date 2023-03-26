@@ -10,7 +10,7 @@ services:
       - DEBUG=1
     depends_on:
       - rabbitmq
-  
+
   celery:
     build: .
     command: celery worker --app=core --loglevel=info --logfile=logs/celery.log
