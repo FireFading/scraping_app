@@ -24,10 +24,21 @@ services:
     depends_on:
       - app
 
-  celery:
-    container_name: celery
+  celery_worker:
+    container_name: celery_worker
     build: .
     command: celery -A scraping worker -l INFO
+    env_file: .env
+    depends_on:
+      - rabbitmq
+      - app
+    links:
+      - rabbitmq
+
+  celery_beat:
+    container_name: celery_beat
+    build: .
+    command: celery -A scraping beat -l INFO
     env_file: .env
     depends_on:
       - rabbitmq

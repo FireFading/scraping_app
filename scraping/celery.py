@@ -13,8 +13,7 @@ app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
     'add-every-monday-morning': {
-        'task': 'core.tasks.hackernews_rss',
-        'schedule': crontab(minute='*/5'),
-        'args': (16, 16),
+        'task': 'hackernews_rss',
+        'schedule': crontab(minute='*/2'),
     },
 }
