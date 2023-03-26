@@ -1,12 +1,10 @@
-import json
 from datetime import datetime
 
-import lxml
 import requests
 from bs4 import BeautifulSoup
 from celery import shared_task
 
-from .models import News
+from core.models import News
 
 
 @shared_task(name="hackernews_rss")

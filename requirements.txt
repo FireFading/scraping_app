@@ -1,4 +1,7 @@
 beautifulsoup4
-celery
 Django
+django_environ
+gunicorn
+celery
 lxml
+requests

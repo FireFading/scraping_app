@@ -1,18 +1,21 @@
-# pull the official base image
-FROM python:3.10-alpine
+FROM python:3.11.0-buster
 
-WORKDIR /usr/src/app
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN mkdir -p /code/
+WORKDIR /code/
 
 # install dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt /usr/src/app/requirements.txt
-RUN pip install -r requirements.txt
+RUN python -m pip install --upgrade pip
+ADD requirements.txt /code/
+RUN python -m pip install --upgrade pip
+RUN python -m pip install -r requirements.txt
 
-# copy project
-COPY . /usr/src/app/
-
-RUN python manage.py migrate
+COPY . /code/
+RUN python manage.py collectstatic --no-input
 
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "127.0.0.1:8000"]
+CMD ["gunicorn", "-c", "./gunicorn/conf.py", "--bind", ":8000", "--chdir", "scraping", "scraping.wsgi:application"]

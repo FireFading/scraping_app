@@ -1,3 +1,2 @@
-- to start rabbitmq: $ `brew services start rabbitmq`
-- to start django app: $ `python manage.py runserver`
-- to start celery: $ `celery worker -B -l INFO`
+### before start change .env.example to .env and set environment variables
+- to start app: `docker compose up --build` in root

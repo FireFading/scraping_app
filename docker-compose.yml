@@ -1,33 +1,45 @@
 services:
-  web:
+  app:
+    container_name: app
     build: .
-    command: python manage.py runserver.py
-    volumes:
-      - .:/usr/src/app
     ports:
       - 8000:8000
-    environment:
-      - DEBUG=1
+    working_dir: /code
+    volumes:
+      - .:/code
+    env_file: .env
     depends_on:
       - rabbitmq
+
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./static:/static
+    ports:
+      - 80:80
+    depends_on:
+      - app
 
   celery:
+    container_name: celery
     build: .
-    command: celery worker --app=core --loglevel=info --logfile=logs/celery.log
-    volumes:
-      - .:/usr/src/app
-    enviroments:
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-      - CELERY_BROKER=amqp:amqp//localhost:5672
-      - CELERY_BACKEND=amqp:amqp//localhost:5672
-      - SECRET_KEY=django-insecure-ur*7@2nzly1yv!oz5#pr6am#u^4=y$$jxa%*$$^*mrgh$$z+b4vg2
+    command: celery -A scraping worker -l INFO
+    env_file: .env
     depends_on:
       - rabbitmq
-      - web
+      - app
     links:
-      - rabbitmq:rabbit
+      - rabbitmq
 
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3.10-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
     ports:
       - "5672:5672"
