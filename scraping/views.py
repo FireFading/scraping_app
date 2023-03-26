@@ -1,9 +1,8 @@
 from core.models import News
-from django.shortcuts import render
-from django.views import generic
+from django.views.generic import ListView
 
 
-class HomePageView(generic.ListView):
+class HomePageView(ListView):
     template_name = "home.html"
     context_object_name = "articles"
 

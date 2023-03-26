@@ -10,8 +10,8 @@ from core.models import News
 @shared_task(name="hackernews_rss")
 def hackernews_rss():
     article_list = []
+    print("Starting scraping")
     try:
-        print("Starting scraping")
         r = requests.get("https://news.ycombinator.com/rss")
         soup = BeautifulSoup(r.content, features="xml")
         articles = soup.findAll("item")
@@ -32,13 +32,13 @@ def hackernews_rss():
 
             return save_function(article_list)
 
-    except Exception as e:
+    except Exception as error:
         print("Scraping failed")
-        print(e)
+        print(error)
 
 
-@shared_task(serializer="json", name="save_fuction")
-def save_function(article_list):
+@shared_task(serializer="json", name="save_function")
+def save_function(article_list: list):
     print("starting")
     new_count = 0
 
