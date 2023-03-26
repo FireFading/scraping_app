@@ -3,5 +3,5 @@ Django
 django_environ
 gunicorn
 celery
-lxml
 requests
+psycopg2-binary
