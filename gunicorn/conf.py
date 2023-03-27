@@ -1,4 +1,3 @@
-
 name = "scrapping"
 loglevel = "info"
 errorlog = "-"
