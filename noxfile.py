@@ -1,5 +1,4 @@
 import nox
-from dotenv import load_dotenv
 
 
 @nox.session
