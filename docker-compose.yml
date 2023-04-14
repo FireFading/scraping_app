@@ -2,6 +2,8 @@ services:
   app:
     container_name: app
     build: .
+    command:  >
+      sh -c "python app/manage.py migrate && gunicorn -c /code/gunicorn/conf.py --bind :8000 --chdir /code/app scraping.wsgi:application"
     ports:
       - 8000:8000
     working_dir: /code
@@ -30,7 +32,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf:/etc/nginx/conf.d
-      - ./static:/static
+      - ./app/static:/static
     ports:
       - 80:80
     depends_on:

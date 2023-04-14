@@ -3,7 +3,6 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 from celery import shared_task
-
 from core.models import News
 
 

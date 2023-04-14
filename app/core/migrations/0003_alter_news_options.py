@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0002_alter_news_created_at_alter_news_link_and_more'),
+        ("core", "0002_alter_news_created_at_alter_news_link_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='news',
-            options={'verbose_name': 'News', 'verbose_name_plural': 'News'},
+            name="news",
+            options={"verbose_name": "News", "verbose_name_plural": "News"},
         ),
     ]

@@ -14,8 +14,6 @@ RUN python -m pip install --upgrade pip
 RUN python -m pip install -r requirements.txt
 
 COPY . /code/
-RUN python manage.py collectstatic --no-input
 
 EXPOSE 8000
 
-CMD ["gunicorn", "-c", "./gunicorn/conf.py", "--bind", ":8000", "--chdir", "scraping", "scraping.wsgi:application"]
